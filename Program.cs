@@ -51,7 +51,11 @@ class Program
                 break;
 
             case "SLEEP":
-                Commands.Add(tokens);
+                Commands.Sleep(tokens);
+                break;
+
+            case "HELP":
+                Commands.Help(tokens);
                 break;
         }
     }

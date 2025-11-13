@@ -72,5 +72,20 @@ namespace Basic_Language_Interpreter
 
             variables[varname] = (vals.Item1 - vals.Item2).ToString();
         }
+
+        public static void Help(string[] tokens)
+        {
+            Console.WriteLine(
+                "Available functions:" +
+                "\n\tPRINT <value>" +
+                "\n\tSET <varname> <value>" +
+                "\n\tSLEEP <duration>" +
+                "\n\tADD <var1> <var2> <resultvar>" +
+                "\n\tSUBTRACT <var1> <var2> <resultvar>" +
+                "\n\tEXIT" +
+                "\n\tCLEAR" +
+                "\nFurther information can be found in the documentation."
+                );
+        }
     }
 }
