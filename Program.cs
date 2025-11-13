@@ -57,6 +57,10 @@ class Program
             case "HELP":
                 Commands.Help(tokens);
                 break;
+
+            default:
+                Console.WriteLine($"<ERROR> {command} is an invalid command. Type HELP if needed.");
+                break;
         }
     }
 }

@@ -10,6 +10,12 @@ namespace Basic_Language_Interpreter
 
         public static void Print(string[] tokens)
         {
+            if (tokens.Length < 2)
+            {
+                Console.WriteLine("<ERROR> Too little arguments. Usage: PRINT <value>");
+                return;
+            }
+
             // In future this should check for "" but may be more complicated that initially thought.
             if (variables.ContainsKey(tokens[1]))
             {
@@ -29,12 +35,24 @@ namespace Basic_Language_Interpreter
 
         public static void Set(string[] tokens)
         {
+            if (tokens.Length < 3)
+            {
+                Console.WriteLine("<ERROR> Too little arguments. Usage: SET <var> <value>");
+                return;
+            }
+
             string varname = tokens[1];
             variables[varname] = tokens[2];
         }
 
         public static void Sleep(string[] tokens)
         {
+            if (tokens.Length < 2)
+            {
+                Console.WriteLine("<ERROR> Too little arguments. Usage: SLEEP <duration>");
+                return;
+            }
+
             int duration = Int32.Parse(tokens[1]) * 1000;
             Task.Delay(duration).Wait();
         }
@@ -57,6 +75,12 @@ namespace Basic_Language_Interpreter
 
         public static void Add(string[] tokens)
         {
+            if (tokens.Length < 4)
+            {
+                Console.WriteLine("<ERROR> Too little arguments. Usage: ADD <var1> <var2> <resultvar>");
+                return;
+            }
+
             Tuple<int, int> vals = VerifyArgsForMaths(tokens);
 
             string varname = tokens[3];
@@ -66,6 +90,12 @@ namespace Basic_Language_Interpreter
 
         public static void Subtract(string[] tokens)
         {
+            if (tokens.Length < 4)
+            {
+                Console.WriteLine("<ERROR> Too little arguments. Usage: SUBTRACT <var1> <var2> <resultvar>");
+                return;
+            }
+
             Tuple<int, int> vals = VerifyArgsForMaths(tokens);
 
             string varname = tokens[3];
