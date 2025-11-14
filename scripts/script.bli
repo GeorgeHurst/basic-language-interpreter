@@ -1,3 +1,15 @@
+PRINT This isn't going to print lol
+
 START
-PRINT script
+PRINT hello!
+SET x 6
+PRINT X equals
+PRINT x
+SET y 8
+PRINT Y equals
+PRINT y
+ADD x y res
+SLEEP 5
+PRINT Result =
+PRINT res
 END

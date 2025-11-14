@@ -108,6 +108,8 @@ Planned features include:
 - Conditional statements (`IF`, `ELSE`)
 - Loops (`WHILE`, `FOR`)
 - Error handling and debugging tools
+- Better print logic (`" "`)
+- Create new script
 
 ---
 <br>

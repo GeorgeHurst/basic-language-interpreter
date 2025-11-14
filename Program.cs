@@ -2,6 +2,12 @@
 
 class Program
 {
+
+    public static string[] validCommands =
+    {
+        "SET", "PRINT", "SLEEP", "START", "END", "ADD", "SUBTRACT"
+    };
+
     static void Main()
     {
         Console.WriteLine("Basic Language Interpreter. Type EXIT to exit.");
@@ -100,6 +106,12 @@ class Program
                 Commands.Help(tokens);
                 break;
 
+            case "START":
+                break;
+
+            case "END":
+                break;
+
             default:
                 Console.WriteLine($"<ERROR> {command} is an invalid command. Type HELP if needed.");
                 break;
@@ -120,6 +132,44 @@ class Program
             scriptsPath = path;
         }
 
-        Console.WriteLine(File.Exists(scriptsPath));
+        if (!File.Exists(scriptsPath)) return;
+
+        using (StreamReader sr = new StreamReader(scriptsPath))
+        {
+            string? line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (string.IsNullOrEmpty(line)) continue;
+
+                string[] tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                string command = tokens[0].ToUpper();
+
+                if (!validCommands.Contains(command))
+                {
+                    Console.WriteLine($"<ERROR> '{command}' is not a valid command.");
+                    return;
+                }
+
+            }
+        }
+
+        bool isStarted = false;
+
+        using (StreamReader sr = new StreamReader(scriptsPath))
+        {
+            string? line;
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (string.IsNullOrEmpty(line)) continue;
+                //if (!isStarted) continue;
+                // need to add starting program
+
+                if (line == "START") isStarted = true;
+                if (line == "END") isStarted = false;
+
+                if (isStarted) Execute(line);
+            }
+        }
+
     }
 }

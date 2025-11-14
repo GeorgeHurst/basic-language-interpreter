@@ -1,0 +1,6 @@
+START
+PAPAAP
+PRINT hello
+SET x 5
+PRINT x
+END
