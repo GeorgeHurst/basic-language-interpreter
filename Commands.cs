@@ -8,7 +8,28 @@ namespace Basic_Language_Interpreter
     {
         static Dictionary<string, string> variables = new();
 
-        public static void Print(string[] tokens)
+        public static void Print(string line)
+        {
+            string[] tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            if (tokens.Length < 2)
+            {
+                Console.WriteLine("<ERROR> Too little arguments. Usage: PRINT <value>");
+                return;
+            }
+
+            // In future this should check for "" but may be more complicated that initially thought.
+            if (variables.ContainsKey(tokens[1]))
+            {
+                Console.Write(variables[tokens[1]]);
+            }
+            else
+            {
+                Console.Write(string.Join(" ", tokens, 1, tokens.Length - 1));
+            }
+        }
+
+        public static void PrintLine(string[] tokens)
         {
             if (tokens.Length < 2)
             {
@@ -26,6 +47,7 @@ namespace Basic_Language_Interpreter
                 Console.WriteLine(string.Join(" ", tokens, 1, tokens.Length - 1));
             }
         }
+
 
         public static void Exit()
         {

@@ -1,15 +1,15 @@
 PRINT This isn't going to print lol
 
 START
-PRINT hello!
+PRINTLINE "hello!"
 SET x 6
-PRINT X equals
-PRINT x
+PRINT "X equals "
+PRINTLINE x
 SET y 8
-PRINT Y equals
-PRINT y
+PRINT "Y equals "
+PRINTLINE y
 ADD x y res
 SLEEP 5
-PRINT Result =
-PRINT res
+PRINT "Result = "
+PRINTLINE res
 END

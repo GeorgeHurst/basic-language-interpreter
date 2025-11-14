@@ -5,7 +5,7 @@ class Program
 
     public static string[] validCommands =
     {
-        "SET", "PRINT", "SLEEP", "START", "END", "ADD", "SUBTRACT"
+        "SET", "PRINT", "PRINTLINE", "SLEEP", "START", "END", "ADD", "SUBTRACT"
     };
 
     static void Main()
@@ -84,6 +84,10 @@ class Program
         {
             case "PRINT":
                 Commands.Print(tokens);
+                break;
+
+            case "PRINTLINE":
+                Commands.PrintLine(tokens);
                 break;
 
             case "SET":
