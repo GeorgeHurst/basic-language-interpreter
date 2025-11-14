@@ -28,48 +28,8 @@ class Program
 
             if (line == "") continue;
 
-            if (line.ToUpper().StartsWith("SCRIPT"))
-            {
-
-                // move this to function vvv
-                string[] tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-                if (tokens[1].ToUpper() == "VIEW")
-                {
-                    string path = Path.GetFullPath(
-                        Path.Combine(AppContext.BaseDirectory, @"..\..\..\scripts")
-                    );
-                    string[] scripts = Directory.GetFiles(path, "*.bli");
-
-                    Console.WriteLine("The following LOCAL scripts can be ran:");
-                    foreach (string longpath in scripts)
-                    {
-                        string script = Path.GetFileName(longpath);
-                        Console.WriteLine("\t" + script);
-                    }
-                    continue;
-                }
-
-
-                bool isRelative = (tokens[1].ToUpper() == "LOCAL");
-
-                int offset;
-                if (isRelative)
-                {
-                    offset = 2;
-                }
-                else
-                {
-                    offset = 1;
-                }
-
-                ExecuteScript(isRelative, tokens[offset]);
-            }
-            else
-            {
-                Execute(line);
-            }
-
+            Execute(line);
+            
         }
     }
 
@@ -116,6 +76,10 @@ class Program
             case "END":
                 break;
 
+            case "SCRIPT":
+                Commands.RunScript(tokens);
+                break;
+
             default:
                 Console.WriteLine($"<ERROR> {command} is an invalid command. Type HELP if needed.");
                 break;
@@ -129,7 +93,7 @@ class Program
         {
             scriptsPath = Path.GetFullPath(
                 Path.Combine(AppContext.BaseDirectory, @"..\..\..\scripts\")
-            ) + path;
+            ) + path + ".bli";
         }
         else
         {
@@ -140,20 +104,47 @@ class Program
 
         using (StreamReader sr = new StreamReader(scriptsPath))
         {
+            bool startFound = false;
+            bool endFound = false;
+
             string? line;
+
+            int lineNumber = 0;
             while ((line = sr.ReadLine()) != null)
             {
+                ++lineNumber;
+
                 if (string.IsNullOrEmpty(line)) continue;
+                if (line.StartsWith('#')) continue;
 
                 string[] tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
                 string command = tokens[0].ToUpper();
 
                 if (!validCommands.Contains(command))
                 {
-                    Console.WriteLine($"<ERROR> '{command}' is not a valid command.");
+                    Console.WriteLine($"<ERROR> Line {lineNumber}: '{command}' is not a valid command.");
                     return;
                 }
 
+                if (command == "START") startFound = true;
+                if (command == "END")   endFound = true;
+
+            }
+
+            if (!startFound && !endFound)
+            {
+                Console.WriteLine("<ERROR> No program entry or exit point located. Use START and END in your program.");
+                return;
+            }
+            else if (!startFound)
+            {
+                Console.WriteLine("<ERROR> No program entry point located. Use START in your program.");
+                return;
+            }
+            else if (!endFound)
+            {
+                Console.WriteLine("<ERROR> No program exit point located. Use END in your program.");
+                return;
             }
         }
 
@@ -165,8 +156,7 @@ class Program
             while ((line = sr.ReadLine()) != null)
             {
                 if (string.IsNullOrEmpty(line)) continue;
-                //if (!isStarted) continue;
-                // need to add starting program
+                if (line.StartsWith('#')) continue;
 
                 if (line == "START") isStarted = true;
                 if (line == "END") isStarted = false;

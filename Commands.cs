@@ -8,9 +8,9 @@ namespace Basic_Language_Interpreter
     {
         static Dictionary<string, string> variables = new();
 
-        public static void Print(string line)
+        public static void Print(string[] tokens)
         {
-            string[] tokens = line.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            string argument = string.Join(" ", tokens, 1, tokens.Length - 1);
 
             if (tokens.Length < 2)
             {
@@ -18,33 +18,43 @@ namespace Basic_Language_Interpreter
                 return;
             }
 
-            // In future this should check for "" but may be more complicated that initially thought.
-            if (variables.ContainsKey(tokens[1]))
+            if (argument.StartsWith("\"") && argument.EndsWith("\"") && argument.Length >= 2)
+            {
+      
+                Console.Write(argument.Substring(1, argument.Length - 2));
+            }
+            else if (variables.ContainsKey(tokens[1]))
             {
                 Console.Write(variables[tokens[1]]);
             }
             else
             {
-                Console.Write(string.Join(" ", tokens, 1, tokens.Length - 1));
+                Console.WriteLine("<ERROR> Unknown variable: " + tokens[1]);
             }
         }
 
         public static void PrintLine(string[] tokens)
         {
+            string argument = string.Join(" ", tokens, 1, tokens.Length - 1);
+
             if (tokens.Length < 2)
             {
-                Console.WriteLine("<ERROR> Too little arguments. Usage: PRINT <value>");
+                Console.WriteLine("<ERROR> Too little arguments. Usage: PRINTLINE <value>");
                 return;
             }
 
-            // In future this should check for "" but may be more complicated that initially thought.
-            if (variables.ContainsKey(tokens[1]))
+            if (argument.StartsWith("\"") && argument.EndsWith("\"") && argument.Length >= 2)
+            {
+
+                Console.WriteLine(argument.Substring(1, argument.Length - 2));
+            }
+            else if (variables.ContainsKey(tokens[1]))
             {
                 Console.WriteLine(variables[tokens[1]]);
             }
             else
             {
-                Console.WriteLine(string.Join(" ", tokens, 1, tokens.Length - 1));
+                Console.WriteLine("<ERROR> Unknown variable: " + tokens[1]);
             }
         }
 
@@ -138,6 +148,39 @@ namespace Basic_Language_Interpreter
                 "\n\tCLEAR" +
                 "\nFurther information can be found in the documentation."
                 );
+        }
+
+        public static void RunScript(string[] tokens)
+        {
+            if (tokens[1].ToUpper() == "VIEW")
+            {
+                string path = Path.GetFullPath(
+                    Path.Combine(AppContext.BaseDirectory, @"..\..\..\scripts")
+                );
+                string[] scripts = Directory.GetFiles(path, "*.bli");
+
+                Console.WriteLine("The following LOCAL scripts can be ran:");
+                foreach (string longpath in scripts)
+                {
+                    string script = Path.GetFileName(longpath);
+                    Console.WriteLine("\t" + script);
+                }
+                return;
+            }
+
+            bool isRelative = (tokens[1].ToUpper() == "LOCAL");
+
+            int offset;
+            if (isRelative)
+            {
+                offset = 2;
+            }
+            else
+            {
+                offset = 1;
+            }
+
+            Program.ExecuteScript(isRelative, tokens[offset]);
         }
     }
 }

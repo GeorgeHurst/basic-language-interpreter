@@ -1,15 +1,28 @@
-PRINT This isn't going to print lol
+# This is outside the program
+PRINTLINE "Hello this isn't ever going to be printed as it is outside the program."
 
 START
-PRINTLINE "hello!"
-SET x 6
-PRINT "X equals "
-PRINTLINE x
-SET y 8
-PRINT "Y equals "
-PRINTLINE y
+
+# FUNCTION sayhello
+# PRINTLINE "Hello there!"
+# PRINTLINE "Today's Date is the 14th"
+# ENDFUNCTION
+
+# Set both our variables for the calculation
+SET x 5
+SET y 9
+
+# Add the vars together
 ADD x y res
-SLEEP 5
-PRINT "Result = "
+
+# Print the result in a human readable way
+PRINT "x = "
+PRINTLINE x
+PRINT "y = "
+PRINTLINE y
+PRINT "x + y = "
 PRINTLINE res
+
+# CALL sayhello
+
 END
